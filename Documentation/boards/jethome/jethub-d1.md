@@ -20,7 +20,6 @@ The OTG USB is untested.
 
 Refer to [jethub manual](https://).
 
-
 ## MMC
 Partition scheme
 num|begin  |sectors |bytes        |mbytes|partition|id         |
@@ -37,5 +36,3 @@ num|begin  |sectors |bytes        |mbytes|partition|id         |
 11 |1597440|16384   |8 388 608    |8     |bootinfo |00000000-0b|
 12 |1630208|196608  |100 663 296  |96    |overlay  |00000000-0c|
 13 |1843200|13426688|6 874 464 256|6 556 |data     |00000000-0d|
-=======
-Refer to [the odroid wiki](https://wiki.odroid.com/odroid-c2/hardware/expansion_connectors).
