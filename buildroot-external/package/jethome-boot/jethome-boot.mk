@@ -7,7 +7,7 @@
 JETHOME_BOOT_SOURCE = ${JETHOME_BOOT_VERSION).tar.gz
 JETHOME_BOOT_SITE = https://github.com/adeepn/jethome-uboot
 
-JETHOME_BOOT_LICENSE = Freeuse
+JETHOME_BOOT_LICENSE = Free binary use
 #JETHOME_BOOT_LICENSE_FILES = Licenses/gpl-2.0.txt
 JETHOME_BOOT_INSTALL_IMAGES = YES
 #JETHOME_BOOT_DEPENDENCIES = uboot
@@ -28,6 +28,7 @@ endef
 else ifeq ($(BR2_PACKAGE_JETHOME_BOOT_JETHUB_H1),y)
 #WIP. Not ready
 endef
+endif
 
 
 define JETHOME_BOOT_INSTALL_IMAGES_CMDS
