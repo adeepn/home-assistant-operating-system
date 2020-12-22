@@ -17,3 +17,4 @@ Default Kernel tree: 5.4
 | Odroid-N2 | 5.9.11 |
 | Odroid-XU4 | 5.9.11 |
 | Intel NUC | 5.4.80 |
+| JetHub D1 | 5.7.16 |
