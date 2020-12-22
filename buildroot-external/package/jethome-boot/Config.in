@@ -1,0 +1,29 @@
+config BR2_PACKAGE_JETHOME_BOOT
+	bool "JetHome Secure Boot Loader"
+	depends on BR2_TARGET_UBOOT
+	help
+	  Augment uboot for secure loading on JetHome targets.
+
+if BR2_PACKAGE_JETHOME_BOOT
+choice
+	prompt "Target"
+	default BR2_PACKAGE_JETHOME_BOOT_JETHUB_D1
+
+config BR2_PACKAGE_JETHOME_BOOT_JETHUB_D1
+	bool "JetHub-D1"
+	help
+	  For the JetHub-D1
+
+config BR2_PACKAGE_JETHOME_BOOT_JETHUB_H1
+	bool "JetHub-H1"
+	help
+	  For the JetHub-H1. WIP!
+endchoice
+
+config BR2_PACKAGE_JETHOME_BOOT_FIX_MAC
+	bool "jethome fix mac !!!!TODO"
+	help
+	  Install script to fix the mac address.
+
+endif
+
