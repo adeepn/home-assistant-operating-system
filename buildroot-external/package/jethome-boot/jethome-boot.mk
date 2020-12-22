@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-JETHOME_BOOT_SOURCE = ${JETHOME_BOOT_VERSION).tar.gz
+JETHOME_BOOT_SOURCE = $(JETHOME_BOOT_VERSION).tar.gz
 JETHOME_BOOT_SITE = https://github.com/adeepn/jethome-uboot
 
 JETHOME_BOOT_LICENSE = Free binary use
