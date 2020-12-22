@@ -1,5 +1,4 @@
 # JetHub D1
-!!!!! TODO  Need rewrite !!!!!
 ## eMMC
 
 eMMC support is provided transparently. Just flash the image to the eMMC board by http://update.jethome.ru/armbian/USB_Burning_Tool_v2.2.3.zip.
