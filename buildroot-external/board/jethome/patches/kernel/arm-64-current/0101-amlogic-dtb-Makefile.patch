@@ -1,0 +1,8 @@
+--- a/arch/arm64/boot/dts/amlogic/Makefile      2020-09-04 11:59:27.000000000 +0300
++++ b/arch/arm64/boot/dts/amlogic/Makefile    2020-12-22 20:53:12.857372272 +0300
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
++dtb-$(CONFIG_ARCH_MESON) += jethome-j100-v1.dts
+ dtb-$(CONFIG_ARCH_MESON) += meson-g12a-x96-max-rmii.dtb
+ dtb-$(CONFIG_ARCH_MESON) += meson-g12a-gt1-mini-a.dtb
+ dtb-$(CONFIG_ARCH_MESON) += meson-axg-s400.dtb
