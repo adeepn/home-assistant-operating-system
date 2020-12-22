@@ -1,0 +1,8 @@
+comment "RTL88x2CS needs a Linux kernel to be built"
+	depends on !BR2_LINUX_KERNEL
+
+config BR2_PACKAGE_RTL88x2CS
+	bool "Realtek RTL88x2CS SDIO Wi-Fi driver"
+	depends on BR2_LINUX_KERNEL
+	help
+          Install Realtek RTL88x2CS Wi-Fi driver as a kernel module.
