@@ -8,7 +8,7 @@
 
 
 function hassos_pre_image() {
-    #local BOOT_DATA="$(path_boot_dir)"
+    local BOOT_DATA="$(path_boot_dir)"
     #local BL1="${BINARIES_DIR}/bl1.bin.hardkernel"
     #local UBOOT_GXBB="${BINARIES_DIR}/u-boot.gxbb"
     #local SPL_IMG="$(path_spl_img)"
