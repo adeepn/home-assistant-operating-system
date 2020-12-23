@@ -6,6 +6,14 @@
 # platform.conf \
 # UBOOT.USB
 
+# Change size partitions
+BOOT_SIZE=(64M 64M)
+BOOTSTATE_SIZE=8M
+SYSTEM_SIZE=256M
+KERNEL_SIZE=64M
+OVERLAY_SIZE=128M
+DATA_SIZE=1G
+
 
 function hassos_pre_image() {
     local BOOT_DATA="$(path_boot_dir)"
