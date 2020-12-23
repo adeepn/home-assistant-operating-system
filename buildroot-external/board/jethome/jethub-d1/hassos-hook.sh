@@ -1,7 +1,6 @@
 #!/bin/bash
 # shellcheck disable=SC2155
 
-<<<<<<< HEAD
 # bootloader.PARTITION \
 # DDR.USB \
 # platform.conf \
