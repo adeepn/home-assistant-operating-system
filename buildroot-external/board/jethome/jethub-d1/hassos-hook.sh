@@ -25,6 +25,7 @@ function hassos_pre_image() {
     #cp "${BINARIES_DIR}/meson-gxbb-odroidc2.dtb" "${BOOT_DATA}/meson-gxbb-odroidc2.dtb"
 
     echo "console=tty0 console=ttyAML0,115200n8" > "${BOOT_DATA}/cmdline.txt"
+    cp "${BINARIES_DIR}/meson-axg-jethome-jethub-j100.dtb" "${BOOT_DATA}/jethome-j100-v1.dtb"
 
     # SPL
     #create_spl_image
@@ -45,6 +46,6 @@ function convert_disk_image_j100() {
     local hdd_ext=${1:-img}
     local hdd_img="$(hassos_image_name "${hdd_ext}")"
 
-    rm -f "${hdd_img}.xz"
-    xz -3 -T0 "${hdd_img}"
+    #rm -f "${hdd_img}.xz"
+    #xz -3 -T0 "${hdd_img}"
 }
