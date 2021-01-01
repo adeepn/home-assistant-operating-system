@@ -1,0 +1,19 @@
+[Unit]
+Description=HassOS ZRAM swap for JetHub D1
+DefaultDependencies=no
+Requires=mnt-data.mount
+After=mnt-data.mount  
+#Before=basic.target
+RefuseManualStart=true
+RefuseManualStop=true
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/jethome/swap_file_maker
+#ExecStart=/usr/libexec/hassos-zram -t swap
+TimeoutStartSec=2min
+RemainAfterExit=true
+StandardOutput=null
+
+[Install]
+WantedBy=hassos-zram.target
