@@ -2,8 +2,8 @@
 Description=HassOS ZRAM swap for JetHub D1
 DefaultDependencies=no
 Requires=mnt-data.mount
-After=mnt-data.mount
-#Before=basic.target
+#After=mnt-data.mount
+Before=dev-zram0.swap
 RefuseManualStart=true
 RefuseManualStop=true
 
