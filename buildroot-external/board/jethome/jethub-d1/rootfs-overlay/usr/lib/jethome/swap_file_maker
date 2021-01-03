@@ -13,7 +13,7 @@ make_swap()
     if [ ! -f "$swap_path" ]; then
       if (( swap_free_space >= swap_size )) ;then
         echo "dd if=/dev/zero of=$swap_path ..."
-        if dd if=/dev/zero of=$swap_path bs=1MiB count=$swap_size status=progress; then
+        if dd if=/dev/zero of=/mnt/data/swapfile bs=1M count=512; then
           chmod -v 600 $swap_path
           if mkswap "$swap_path"; then
             if ! grep -qP "$swap_path" $swap_etc_fstab; then

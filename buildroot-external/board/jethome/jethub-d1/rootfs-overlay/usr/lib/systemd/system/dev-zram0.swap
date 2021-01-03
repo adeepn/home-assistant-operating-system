@@ -4,7 +4,7 @@ Requires=zram-swap.service
 After=zram-swap.service
 
 [Swap]
-What=/dev/zram0
+What=/mnt/data/swapfile
 
 [Install]
 WantedBy=swap.target
