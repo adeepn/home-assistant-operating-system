@@ -12,7 +12,7 @@ make_swap()
 
   if [ -n "$swap_free_space" ]; then
     if [ ! -f "$swap_path" ]; then
-      if (( swap_free_space >= swap_size )) ;then
+      if [ $swap_free_space -ge $swap_size ]; then
         echo "dd if=/dev/zero of=$swap_path ..."
         if dd if=/dev/zero of=$swap_path bs=1M count=512; then
           chmod 0600 $swap_path
@@ -20,6 +20,7 @@ make_swap()
             if ! grep -qP "$swap_path" $swap_etc_fstab; then
               echo "$swap_path none swap sw,pri=$swap_priority 0 0" >> $swap_etc_fstab
               if swapon --verbose --priority $swap_priority "$swap_path"; then
+                echo "swap created and added succesfully"
               else
                 echo "swapon $swap_path failed"
               fi
@@ -56,3 +57,5 @@ make_swap_axg() {
     echo "SoC detection failed. Unable to create swap file"
   fi
 }
+
+make_swap_axg

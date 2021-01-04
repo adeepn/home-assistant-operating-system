@@ -6,7 +6,6 @@ index 666b1544c..903b9e1ab 100644
  # SPDX-License-Identifier: GPL-2.0
  dtb-$(CONFIG_ARCH_MESON) += meson-axg-s400.dtb
 +dtb-$(CONFIG_ARCH_MESON) += meson-axg-jethome-jethub-j100.dtb
-+dtb-$(CONFIG_ARCH_MESON) += jethome-j100-v1.dtb
  dtb-$(CONFIG_ARCH_MESON) += meson-g12a-sei510.dtb
  dtb-$(CONFIG_ARCH_MESON) += meson-g12a-u200.dtb
  dtb-$(CONFIG_ARCH_MESON) += meson-g12a-x96-max.dtb
@@ -762,13 +761,13 @@ index 000000000..8e6bd30ca
 +
 +&uart_A {
 +	status = "okay";
-+	pinctrl-0 = <&uart_a_pins>, <&uart_a_cts_rts_pins>;
++	pinctrl-0 = <&uart_b_z_pins>, <&uart_b_z_cts_rts_pins>;
 +	pinctrl-names = "default";
 +	uart-has-rtscts;
 +
 +	bluetooth {
 +		compatible = "brcm,bcm43438-bt";
-+		shutdown-gpios = <&gpio GPIOX_21 GPIO_ACTIVE_HIGH>;
++		shutdown-gpios = <&gpio GPIOZ_7 GPIO_ACTIVE_HIGH>;
 +	};
 +};
 +
