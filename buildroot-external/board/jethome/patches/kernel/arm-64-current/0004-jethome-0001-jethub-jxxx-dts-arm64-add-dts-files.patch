@@ -22,7 +22,7 @@ new file mode 100644
 index 000000000..cf0e6e742
 --- /dev/null
 +++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
-@@ -0,0 +1,120 @@
+@@ -0,0 +1,116 @@
 +
 +/dts-v1/;
 +
@@ -128,10 +128,6 @@ index 000000000..cf0e6e742
 +			key-permit = "read","write","del";
 +		};
 +	}; //End unifykey
-+};
-+
-+&usb {
-+	dr_mode = "host";
 +};
 +
 +&efuse {
