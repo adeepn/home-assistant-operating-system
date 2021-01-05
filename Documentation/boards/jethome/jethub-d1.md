@@ -1,8 +1,8 @@
 # JetHub D1
 
-## eMMC
+## MMC
 
-eMMC support is provided transparently. Just flash the image to the eMMC board by http://update.jethome.ru/armbian/USB_Burning_Tool_v2.2.3.zip.
+MMC support is provided transparently. Just flash the image to the MMC board by http://update.jethome.ru/armbian/USB_Burning_Tool_v2.2.3.zip
 
 ## Console
 
@@ -18,9 +18,11 @@ The OTG USB is untested.
 
 ## GPIO
 
-Refer to [jethub manual](https://).
+Work in progress
 
 ## MMC
+
+Uboot has MBR partition table autogeneration.
 Partition scheme
 num|begin  |sectors |bytes        |mbytes|partition|id         |
 1  |0      |8192    |4 194 304    |4     |         |00000000-01|
