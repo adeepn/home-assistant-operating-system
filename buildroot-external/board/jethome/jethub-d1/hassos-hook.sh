@@ -5,6 +5,8 @@
 # DDR.USB \
 # platform.conf \
 # UBOOT.USB
+# $BOARD_DIR
+# $BOARD_DIR/bin/
 
 set -e # Exit immediately if a command exits with a non-zero status
 set -u # Treat unset variables and parameters as an error
@@ -59,98 +61,53 @@ function hassos_pre_image() {
     #dd if="${UBOOT_GXBB}" of="${SPL_IMG}" conv=notrunc bs=512 seek=97
 }
 
+
 function hassos_post_image() {
-    #convert_disk_image_j100
-    echo convert ok
+    convert_disk_image_xz
 }
 
-
-
-function convert_disk_image_j100() {
-    local IMG_BOOT=PART.1.boot
-    local IMG_OVERLAY=PART.7.overlay
-    local IMG_DATA=PART.8.data
-    local IMG_KERNELA=PART.2.kernela
-    local IMG_SYSTEMA=PART.3.systema
-    local IMG_KERNELB=PART.4.kernelb
-    local IMG_SYSTEMB=PART.5.systemb
-    local IMG_BOOTINFO=PART.6.bootinfo
-
-    local hdd_ext=${1:-img}
-    local hdd_img="$(hassos_image_name "${hdd_ext}")"
-
-    #rm -f "${hdd_img}.xz"
-    #xz -3 -T0 "${hdd_img}"
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    DETECTED_PARTITIONS=$(fdisk -l -o Device,Start,End,Sectors $INPUT_IMG | grep ${hdd_img}| tail -n +2)
-
-    PART_BOOT=$(echo "$DETECTED_PARTITIONS" |tail -n +1 | head -n 1)
-    PART_BOOT_START=$(echo "$PART_BOOT" | awk '{print $2}')      # in sectors. sector size is 512 bytes
-    PART_BOOT_SIZE=$(echo "$PART_BOOT" | awk '{print $4}')
-
-    #PART_EXTENDED=`sfdisk -d $1 | grep -P -A 100 ".+start=.+size=.+type=.+" |tail -n +2 | head -n 1`
-
-    PART_OVERLAY=$(echo "$DETECTED_PARTITIONS" |tail -n +3 | head -n 1)
-    PART_OVERLAY_START=$(echo "$PART_OVERLAY" | awk '{print $2}')      # in sectors. sector size is 512 bytes
-    PART_OVERLAY_SIZE=$(echo "$PART_OVERLAY" | awk '{print $4}')
-
-    PART_DATA=$(echo "$DETECTED_PARTITIONS" |tail -n +4 | head -n 1)
-    PART_DATA_START=$(echo "$PART_DATA" | awk '{print $2}')      # in sectors. sector size is 512 bytes
-    PART_DATA_SIZE=$(echo "$PART_DATA" | awk '{print $4}')
-
-    PART_KERNELA=$(echo "$DETECTED_PARTITIONS" |tail -n +5 | head -n 1)
-    PART_KERNELA_START=$(echo "$PART_KERNELA" | awk '{print $2}')      # in sectors. sector size is 512 bytes
-    PART_KERNELA_SIZE=$(echo "$PART_KERNELA" | awk '{print $4}')
-
-    PART_SYSTEMA=$(echo "$DETECTED_PARTITIONS" |tail -n +6 | head -n 1)
-    PART_SYSTEMA_START=$(echo "$PART_SYSTEMA" | awk '{print $2}')      # in sectors. sector size is 512 bytes
-    PART_SYSTEMA_SIZE=$(echo "$PART_SYSTEMA" | awk '{print $4}')
-
-    PART_KERNELB=$(echo "$DETECTED_PARTITIONS" |tail -n +7 | head -n 1)
-    PART_KERNELB_START=$(echo "$PART_KERNELB" | awk '{print $2}')      # in sectors. sector size is 512 bytes
-    PART_KERNELB_SIZE=$(echo "$PART_KERNELB" | awk '{print $4}')
-
-    PART_SYSTEMB=$(echo "$DETECTED_PARTITIONS" |tail -n +8 | head -n 1)
-    PART_SYSTEMB_START=$(echo "$PART_SYSTEMB" | awk '{print $2}')      # in sectors. sector size is 512 bytes
-    PART_SYSTEMB_SIZE=$(echo "$PART_SYSTEMB" | awk '{print $4}')
-
-    PART_BOOTINFO=$(echo "$DETECTED_PARTITIONS" |tail -n +9 | head -n 1)
-    PART_BOOTINFO_START=$(echo "$PART_BOOTINFO" | awk '{print $2}')      # in sectors. sector size is 512 bytes
-    PART_BOOTINFO_SIZE=$(echo "$PART_BOOTINFO" | awk '{print $4}')
-
-    extract_partition "BOOT" "$INPUT_IMG" "$PART_BOOT_START" "$PART_BOOT_SIZE" "$IMG_BOOT"
-    extract_partition "OVERLAY" "$INPUT_IMG" "$PART_OVERLAY_START" "$PART_OVERLAY_SIZE" "$IMG_OVERLAY"
-    extract_partition "DATA" "$INPUT_IMG" "$PART_DATA_START" "$PART_DATA_SIZE" "$IMG_DATA"
-    extract_partition "KERNELA" "$INPUT_IMG" "$PART_KERNELA_START" "$PART_KERNELA_SIZE" "$IMG_KERNELA"
-    extract_partition "SYSTEMA" "$INPUT_IMG" "$PART_SYSTEMA_START" "$PART_SYSTEMA_SIZE" "$IMG_SYSTEMA"
-    extract_partition "KERNELB" "$INPUT_IMG" "$PART_KERNELB_START" "$PART_KERNELB_SIZE" "$IMG_KERNELB"
-    extract_partition "SYSTEMB" "$INPUT_IMG" "$PART_SYSTEMB_START" "$PART_SYSTEMB_SIZE" "$IMG_SYSTEMB"
-    extract_partition "BOOTINFO" "$INPUT_IMG" "$PART_BOOTINFO_START" "$PART_BOOTINFO_SIZE" "$IMG_BOOTINFO"
-
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+function create_disk_image() {
+    _prepare_disk_image
+    _create_disk_aml
 }
 
+function _create_disk_aml() {
+    # ${FILE##*/}
+    local boot_img="$(path_boot_img)"
+    local rootfs_img="$(path_rootfs_img)"
+    local overlay_img="$(path_overlay_img)"
+    local data_img="$(path_data_img)"
+    local kernel_img="$(path_kernel_img)"
+    local hdd_img="$(hassos_image_name img)"
+    local hdd_count=${DISK_SIZE:-2}
+    local disk_layout="${BINARIES_DIR}/disk.layout"
+    local boot_start=$(size2sectors "8M")
 
-extract_partition() {
-  if [[ -n "$1" || -n "$2" || -n "$3" || -n "$4" || -n "$5" ]] ; then
-    local PART_NAME="$1"
-    local INPUT_FILE="$2"
-    local SKIP="$3"
-    local COUNT="$4"
-    local OUTPUT_FILE="$5"
+    echo '[LIST_NORMAL]' > ${BINARIES_DIR}/image.cfg
+    echo 'file="DDR.USB"		main_type="USB"		sub_type="DDR"'  >> ${BINARIES_DIR}/image.cfg
+    echo 'file="UBOOT.USB"		main_type="USB"		sub_type="UBOOT"' >> ${BINARIES_DIR}/image.cfg
+    echo 'file="_aml_dtb.PARTITION"		main_type="dtb"		sub_type="meson1"' >> ${BINARIES_DIR}/image.cfg
+    echo 'file="platform.conf"		main_type="conf"		sub_type="platform"' >> ${BINARIES_DIR}/image.cfg
+    echo '' >> ${BINARIES_DIR}/image.cfg
+    echo '[LIST_VERIFY]' >> ${BINARIES_DIR}/image.cfg
+    echo 'file="_aml_dtb.PARTITION"	main_type="PARTITION"		sub_type="_aml_dtb"' >> ${BINARIES_DIR}/image.cfg
+    echo 'file="bootloader.PARTITION"	main_type="PARTITION"		sub_type="bootloader"' >> ${BINARIES_DIR}/image.cfg
+    echo 'file="'${boot_img##*/}'"		main_type="PARTITION"		sub_type="boot"' >> ${BINARIES_DIR}/image.cfg
+    echo 'file="'${kernel_img##*/}'"		main_type="PARTITION"		sub_type="kernela"' >> ${BINARIES_DIR}/image.cfg
+    echo 'file="'${rootfs_img##*/}'"		main_type="PARTITION"		sub_type="systema"' >> ${BINARIES_DIR}/image.cfg
+#    echo 'file="'PART.4.kernelb'"		main_type="PARTITION"		sub_type="kernelb"' >> ${BINARIES_DIR}/image.cfg
+#    echo 'file="'PART.5.systemb'"		main_type="PARTITION"		sub_type="systemb"' >> ${BINARIES_DIR}/image.cfg
+#    echo 'file="'PART.6.bootinfo'"		main_type="PARTITION"		sub_type="bootstate"' >> ${BINARIES_DIR}/image.cfg
+    echo 'file="'${overlay_img##*/}'"		main_type="PARTITION"		sub_type="overlay"' >> ${BINARIES_DIR}/image.cfg
+    echo 'file="'${data_img##*/}'"		main_type="PARTITION"		sub_type="data"' >> ${BINARIES_DIR}/image.cfg
 
-    print_cmd_title "Extracting $PART_NAME partition from $INPUT_FILE to $OUTPUT_FILE ..."
-    dd status=progress bs=1b skip=$SKIP count=$COUNT if=$INPUT_FILE of=$OUTPUT_FILE # 1b = 512 bytes
-  else
-    echo "${FUNCNAME[0]}(): Null parameter passed to this function"
-  fi
+    cp $BOARD_DIR/bin/DDR.USB $BINARIES_DIR/
+    cp $BOARD_DIR/bin/UBOOT.USB $BINARIES_DIR/
+    cp $BOARD_DIR/bin/bootloader.PARTITION $BINARIES_DIR/
+    cp $BOARD_DIR/bin/platform.conf $BINARIES_DIR/
+
+    cc -o $BINARIES_DIR/dtbTool $BOARD_DIR/bin/dtbTool.c
+    $BINARIES_DIR/dtbTool -o $BINARIES_DIR/_aml_dtb.PARTITION ${BINARIES_DIR}/
+    $BOARD_DIR/bin/aml_image_v2_packer -r ${BINARIES_DIR}/image.cfg ${BINARIES_DIR}/ $hdd_img
+    echo "Image created"
 }
-
-#LOOPDEVICE=`sudo losetup --show -f $INPUT_IMG`
-#echo Mounted $LOOPDEVICE
-
-
-
-#sudo blkid $LOOPDEVICE*
-#sudo lsblk -f
-#sudo losetup -d $LOOPDEVICE
