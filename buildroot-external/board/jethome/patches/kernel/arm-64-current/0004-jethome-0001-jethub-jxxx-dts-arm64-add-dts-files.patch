@@ -2,7 +2,7 @@ diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/
 index 666b1544c..903b9e1ab 100644
 --- a/arch/arm64/boot/dts/amlogic/Makefile
 +++ b/arch/arm64/boot/dts/amlogic/Makefile
-@@ -1,5 +1,7 @@
+@@ -1,5 +1,6 @@
  # SPDX-License-Identifier: GPL-2.0
  dtb-$(CONFIG_ARCH_MESON) += meson-axg-s400.dtb
 +dtb-$(CONFIG_ARCH_MESON) += meson-axg-jethome-jethub-j100.dtb
