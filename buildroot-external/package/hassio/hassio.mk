@@ -10,8 +10,6 @@ HASSIO_LICENSE_FILES = $(BR2_EXTERNAL_HASSOS_PATH)/../LICENSE
 HASSIO_SITE = $(BR2_EXTERNAL_HASSOS_PATH)/package/hassio
 HASSIO_SITE_METHOD = local
 
-BR2_PACKAGE_HASSIO_MACHINE=odroid-c2
-
 define HASSIO_BUILD_CMDS
 	docker build --tag hassos-hostapps $(@D)/builder
 endef
