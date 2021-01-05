@@ -6,9 +6,7 @@ make_swap()
   local swap_part=/mnt/data
   local swap_path=/mnt/data/swapfile
   local swap_free_space=$(env stat -f -c '%a*%S/1024/1024' $swap_part | bc)
-  local swap_etc_fstab=/etc/fstab
   local swap_priority=6
-  local swap_zram_config=/etc/default/armbian-zram-config
 
   if [ -n "$swap_free_space" ]; then
     if [ ! -f "$swap_path" ]; then
@@ -17,15 +15,10 @@ make_swap()
         if dd if=/dev/zero of=$swap_path bs=1M count=512; then
           chmod 0600 $swap_path
           if mkswap "$swap_path"; then
-            if ! grep -qP "$swap_path" $swap_etc_fstab; then
-              echo "$swap_path none swap sw,pri=$swap_priority 0 0" >> $swap_etc_fstab
-              if swapon --verbose --priority $swap_priority "$swap_path"; then
-                echo "swap created and added succesfully"
-              else
-                echo "swapon $swap_path failed"
-              fi
+            if swapon --verbose --priority $swap_priority "$swap_path"; then
+              echo "swap created and added succesfully"
             else
-              echo "$swap_etc_fstab already contain $swap_path"
+              echo "swapon $swap_path failed"
             fi
           fi
         else
